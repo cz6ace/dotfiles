@@ -1,0 +1,169 @@
+" Basic Settings {{{
+set nocp
+set hidden
+set nobackup
+set noswapfile
+set autoindent
+set smartindent
+set undodir=~/.vimtmp//,.
+" set the same TAB width
+set shiftwidth=2
+set tabstop=2
+set softtabstop=2
+set expandtab
+set number
+" show the filename always, even with just one file opened
+set laststatus=2
+" allow change from unwritten buffer to another one
+set hidden
+
+" no bells
+set noerrorbells
+set visualbell
+set t_vb=
+
+" command history
+set history=1000
+
+" filetype plugin
+filetype on
+filetype plugin on
+filetype indent on
+syntax enable
+
+" vimdiff
+colorscheme desert
+
+" }}}
+
+" Mappings {{{
+" disable arrows for learning the vim hard way
+nnoremap <up>    <Nop>
+nnoremap <down>  <Nop>
+nnoremap <left>  <Nop>
+nnoremap <right> <Nop>
+"inoremap <up>    <Nop>
+"inoremap <down>  <Nop>
+"inoremap <left>  <Nop>
+"inoremap <right> <Nop>
+" edit and reload vimrc
+nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <Leader>sv :source $MYVIMRC<CR>
+" navigating between buffers
+nnoremap <C-n> :bnext<CR>
+nnoremap <C-p> :bprevious<CR>
+" }}}
+
+" FileType Settings {{{1
+
+" in makefiles, don't expand tabs to spaces, since actual tab characters are
+" needed, and have indentation at 8 chars to be sure that all indents are tabs
+" (despite the mappings later):
+autocmd FileType make setlocal noexpandtab shiftwidth=8 softtabstop=0
+
+
+" abbreviations
+augroup shell_group
+    autocmd!
+    autocmd FileType sh iabbrev <buffer> _sh #!/bin/bash
+augroup END
+
+" jenkins file settings ---------------------- {{{
+augroup filetype_jenkins_groovy
+    autocmd!
+    autocmd BufNewFile,BufRead *.jenkinsfile,*.Jenkinsfile,Jenkinsfile,jenkinsfile setf groovy
+augroup END
+
+" groovy file settings ---------------------- {{{
+augroup filetype_groovy
+    autocmd!
+    autocmd FileType groovy nnoremap <C-F9> :w <bar> exec '!groovy '.shellescape('%')<CR>
+augroup END
+
+" python file settings ---------------------- {{{
+augroup filetype_python
+    autocmd!
+    autocmd FileType python setlocal foldmethod=indent
+    autocmd FileType python setlocal shiftwidth=4
+    autocmd FileType python setlocal softtabstop=4
+    autocmd FileType python nnoremap <C-F9> :w <bar> exec '!python '.shellescape('%')<CR>
+augroup END
+" }}}
+" Vimscript file settings ---------------------- {{{
+augroup filetype_vim
+    autocmd!
+    autocmd FileType vim setlocal foldmethod=marker
+augroup END
+" }}}
+
+" C/C++ ---------------------- {{{
+augroup filetype_cpp 
+    autocmd!
+    autocmd FileType c,cpp setlocal foldmethod=syntax
+    autocmd FileType c nnoremap <buffer> <F9> :w <bar> exec '!gcc '.shellescape('%').' -o '.shellescape('%:r')<CR>
+    autocmd FileType c nnoremap <buffer> <C-F9> :w <bar> exec '!gcc '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')<CR>
+    autocmd FileType cpp nnoremap <buffer> <F9> :w <bar> exec '!g++ -ggdb '.shellescape('%').' -o '.shellescape('%:r')<CR>
+    autocmd FileType cpp nnoremap <buffer> <C-F9> :w <bar> exec '!g++ -ggdb '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')<CR>
+augroup END
+"}}}
+
+
+" java abbreviations ------------------------------{{{
+iabbrev psvm public static void main(String[] args){<CR>}<esc>O
+iabbrev sysout System.out.println("");<esc>2hi
+" abbr sop System.out.println("");<esc>2hi
+" abbr syserr System.err.println("");<esc>2hi
+" abbr sep System.err.println("");<esc>2hi
+" abbr forl for (int i = 0; i <; i++) {<esc>7hi
+" abbr tryb try {<CR>} catch (Exception ex) {<CR> ex.printStackTrace();<CR>}<esc>hx3ko
+" }}}
+
+" }}}1
+
+" folder browsing {{{
+let g:netrw_browse_split = 4
+let g:netrw_banner = 0
+" v: split to the right, not to the left
+let g:netrw_altv = 1
+" }}}
+
+" read local project specific vimrc
+if filereadable("vimrc.proj")
+    source vimrc.proj
+endif
+
+" Source local .vimrc file, for given computer or company specific file
+if filereadable(expand("~/.vimrc.local"))
+  source ~/.vimrc.local
+endif
+
+" GUI enhancements ---{{{
+" create a highlight of cursor line in the active window only
+augroup BgHighlight
+    autocmd!
+    autocmd WinEnter * set cul
+    autocmd WinLeave * set nocul
+augroup END
+" }}}
+
+" GUI font size zooming
+if has("gui_running")
+  if has("unix")
+    let s:fontname="Ubuntu Mono 15"
+  else
+    let s:fontname="Consolas:h12"
+  endif
+  let &guifont=s:fontname
+  nnoremap <Leader>0z :silent! set guifont=Consolas:h12<CR>
+  nnoremap <Leader>z :silent! let &guifont = substitute(
+    \ &guifont,
+    \ '\d\+$',
+    \ '\=eval(submatch(0)+2)',
+    \ '')<CR>
+  nnoremap <Leader>Z :silent! let &guifont = substitute(
+    \ &guifont,
+    \ '\d\+',
+    \ '\=eval(submatch(0)-2)',
+    \ '')<CR>
+end
+
