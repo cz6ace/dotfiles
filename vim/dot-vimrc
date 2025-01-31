@@ -73,12 +73,14 @@ augroup filetype_jenkins_groovy
     autocmd!
     autocmd BufNewFile,BufRead *.jenkinsfile,*.Jenkinsfile,Jenkinsfile,jenkinsfile setf groovy
 augroup END
+" }}}
 
-" groovy file settings ---------------------- {{{
+" groovy file settings ---------------------- {{{{{{
 augroup filetype_groovy
     autocmd!
-    autocmd FileType groovy nnoremap <C-F9> :w <bar> exec '!groovy '.shellescape('%')<CR>
+    autocmd FileType groovy nnoremap <buffer> <C-F9> :w <bar> exec '!groovy '.shellescape('%')<CR>
 augroup END
+" }}}}}}
 
 " python file settings ---------------------- {{{
 augroup filetype_python
@@ -86,7 +88,8 @@ augroup filetype_python
     autocmd FileType python setlocal foldmethod=indent
     autocmd FileType python setlocal shiftwidth=4
     autocmd FileType python setlocal softtabstop=4
-    autocmd FileType python nnoremap <C-F9> :w <bar> exec '!python '.shellescape('%')<CR>
+    autocmd FileType python nnoremap <buffer> <C-F9> :w <bar> exec '!python '.shellescape('%')<CR>
+"tryb}}}
 augroup END
 " }}}
 " Vimscript file settings ---------------------- {{{
@@ -125,17 +128,11 @@ let g:netrw_browse_split = 4
 let g:netrw_banner = 0
 " v: split to the right, not to the left
 let g:netrw_altv = 1
+" Change the size of the Netrw window
+let g:netrw_winsize = 30
+" Toggle LExplore on F3 key
+nnoremap <silent> <F3> :Lexplore<cr>
 " }}}
-
-" read local project specific vimrc
-if filereadable("vimrc.proj")
-    source vimrc.proj
-endif
-
-" Source local .vimrc file, for given computer or company specific file
-if filereadable(expand("~/.vimrc.local"))
-  source ~/.vimrc.local
-endif
 
 " GUI enhancements ---{{{
 " create a highlight of cursor line in the active window only
@@ -167,3 +164,12 @@ if has("gui_running")
     \ '')<CR>
 end
 
+" Source local .vimrc file, for given computer or company specific file
+if filereadable(expand("~/.vimrc.local"))
+  source ~/.vimrc.local
+endif
+
+" read local project specific vimrc
+if filereadable("vimrc.proj")
+    source vimrc.proj
+endif
