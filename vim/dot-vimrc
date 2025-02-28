@@ -52,6 +52,11 @@ nnoremap <Leader>sv :source $MYVIMRC<CR>
 " navigating between buffers
 nnoremap <C-n> :bnext<CR>
 nnoremap <C-p> :bprevious<CR>
+" Argslist navigation
+nnoremap [a :previous<CR>
+nnoremap ]a :next<CR>
+nnoremap [A :first<CR>
+nnoremap ]A :last<CR>
 " }}}
 
 " FileType Settings {{{1
@@ -61,41 +66,10 @@ nnoremap <C-p> :bprevious<CR>
 " (despite the mappings later):
 autocmd FileType make setlocal noexpandtab shiftwidth=8 softtabstop=0
 
-
-" abbreviations
-augroup shell_group
-    autocmd!
-    autocmd FileType sh iabbrev <buffer> _sh #!/bin/bash
-augroup END
-
 " jenkins file settings ---------------------- {{{
 augroup filetype_jenkins_groovy
     autocmd!
     autocmd BufNewFile,BufRead *.jenkinsfile,*.Jenkinsfile,Jenkinsfile,jenkinsfile setf groovy
-augroup END
-" }}}
-
-" groovy file settings ---------------------- {{{{{{
-augroup filetype_groovy
-    autocmd!
-    autocmd FileType groovy nnoremap <buffer> <C-F9> :w <bar> exec '!groovy '.shellescape('%')<CR>
-augroup END
-" }}}}}}
-
-" python file settings ---------------------- {{{
-augroup filetype_python
-    autocmd!
-    autocmd FileType python setlocal foldmethod=indent
-    autocmd FileType python setlocal shiftwidth=4
-    autocmd FileType python setlocal softtabstop=4
-    autocmd FileType python nnoremap <buffer> <C-F9> :w <bar> exec '!python '.shellescape('%')<CR>
-"tryb}}}
-augroup END
-" }}}
-" Vimscript file settings ---------------------- {{{
-augroup filetype_vim
-    autocmd!
-    autocmd FileType vim setlocal foldmethod=marker
 augroup END
 " }}}
 
@@ -110,16 +84,6 @@ augroup filetype_cpp
 augroup END
 "}}}
 
-
-" java abbreviations ------------------------------{{{
-iabbrev psvm public static void main(String[] args){<CR>}<esc>O
-iabbrev sysout System.out.println("");<esc>2hi
-" abbr sop System.out.println("");<esc>2hi
-" abbr syserr System.err.println("");<esc>2hi
-" abbr sep System.err.println("");<esc>2hi
-" abbr forl for (int i = 0; i <; i++) {<esc>7hi
-" abbr tryb try {<CR>} catch (Exception ex) {<CR> ex.printStackTrace();<CR>}<esc>hx3ko
-" }}}
 
 " }}}1
 
